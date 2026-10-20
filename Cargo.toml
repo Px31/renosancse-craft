@@ -1,0 +1,38 @@
+[package]
+name = "renosancse-craft"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.80"
+authors = ["ArtCraft Contributors <hello@artcraft.dev>"]
+license = "MIT"
+description = "The last audio converter you will ever need. Lossless-first, cross-platform, FFmpeg-powered."
+repository = "https://github.com/artcraft/renosancse-craft"
+homepage = "https://github.com/artcraft/renosancse-craft"
+documentation = "https://docs.rs/renosancse-craft"
+readme = "README.md"
+keywords = ["audio", "converter", "ffmpeg", "music", "gui"]
+categories = ["multimedia::audio", "gui"]
+exclude = [".github/", "assets/screenshots/"]
+
+[[bin]]
+name = "renosancse-craft"
+path = "src/main.rs"
+
+[dependencies]
+iced = { version = "0.13", features = ["tokio", "image", "svg"] }
+tokio = { version = "1", features = ["full"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+directories = "5"
+infer = "0.16"
+anyhow = "1"
+thiserror = "2"
+rfd = "0.15"
+which = "7"
+log = "0.4"
+env_logger = "0.11"
+
+[profile.release]
+lto = "thin"
+codegen-units = 1
+strip = "symbols"

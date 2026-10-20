@@ -1,0 +1,105 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  linux:
+    name: Linux (deb + rpm + tar.gz)
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - name: System deps
+        run: |
+          sudo apt update
+          sudo apt install -y build-essential pkg-config libasound2-dev \
+            libxkbcommon-dev libwayland-dev
+      - run: cargo build --release
+      - name: Package .deb
+        run: |
+          cargo install cargo-deb --locked
+          cargo deb --no-build
+      - name: Package .rpm
+        run: |
+          cargo install cargo-generate-rpm --locked
+          cargo generate-rpm
+      - name: Portable tarball
+        run: |
+          VER="${GITHUB_REF_NAME#v}"
+          tar -czf "renosancse-craft-${VER}-x86_64-linux.tar.gz" \
+            -C target/release renosancse-craft
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux
+          path: |
+            target/debian/*.deb
+            target/generate-rpm/*.rpm
+            renosancse-craft-*-x86_64-linux.tar.gz
+
+  windows:
+    name: Windows (zip)
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - run: cargo build --release
+      - name: Package zip
+        shell: pwsh
+        run: |
+          $ver = $env:GITHUB_REF_NAME -replace '^v',''
+          New-Item -ItemType Directory -Force -Path dist | Out-Null
+          Copy-Item target/release/renosancse-craft.exe dist/
+          Copy-Item README.md,LICENSE dist/
+          Compress-Archive -Path dist/* -DestinationPath "renosancse-craft-${ver}-x86_64-windows.zip"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: windows
+          path: renosancse-craft-*-x86_64-windows.zip
+
+  macos:
+    name: macOS (tar.gz)
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - run: cargo build --release
+      - name: Package
+        run: |
+          VER="${GITHUB_REF_NAME#v}"
+          tar -czf "renosancse-craft-${VER}-aarch64-macos.tar.gz" \
+            -C target/release renosancse-craft
+      - uses: actions/upload-artifact@v4
+        with:
+          name: macos
+          path: renosancse-craft-*-aarch64-macos.tar.gz
+
+  publish:
+    name: Publish GitHub Release
+    needs: [linux, windows, macos]
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: ${{ github.ref_name }}
+          generate_release_notes: true
+          files: dist/**
+          draft: false
+          prerelease: false
