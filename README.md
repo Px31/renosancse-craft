@@ -1,7 +1,11 @@
+<p align="center">
+  <img src="assets/icon.png" width="144" alt="Renosancse Craft logo" />
+</p>
+
 # Renosancse Craft
 
-[![CI](https://github.com/artcraft/renosancse-craft/actions/workflows/ci.yml/badge.svg)](https://github.com/artcraft/renosancse-craft/actions/workflows/ci.yml)
-[![Release](https://github.com/artcraft/renosancse-craft/actions/workflows/release.yml/badge.svg)](https://github.com/artcraft/renosancse-craft/actions/workflows/release.yml)
+[![CI](https://github.com/Px31/renosancse-craft/actions/workflows/ci.yml/badge.svg)](https://github.com/Px31/renosancse-craft/actions/workflows/ci.yml)
+[![Release](https://github.com/Px31/renosancse-craft/actions/workflows/release.yml/badge.svg)](https://github.com/Px31/renosancse-craft/actions/workflows/release.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Rust](https://img.shields.io/badge/rust-1.80%2B-orange.svg)](https://www.rust-lang.org)
 [![Platforms](https://img.shields.io/badge/platforms-Windows%20%7C%20Linux%20%7C%20macOS-blue.svg)](#install)
@@ -29,7 +33,7 @@ Renosancse Craft detects what an audio file *actually is* (magic bytes, not just
 ## Install
 
 ### Windows
-Download the latest `renosancse-craft-vX.Y.Z-x86_64-pc-windows-msvc.zip` from [Releases](https://github.com/artcraft/renosancse-craft/releases), extract, and run `renosancse-craft.exe`. Requires **FFmpeg** on `PATH` — install with [Scoop](https://scoop.sh) or [winget](https://learn.microsoft.com/windows/package-manager/):
+Download the latest `renosancse-craft-vX.Y.Z-x86_64-pc-windows-msvc.zip` from [Releases](https://github.com/Px31/renosancse-craft/releases), extract, and run `renosancse-craft.exe`. Requires **FFmpeg** on `PATH` — install with [Scoop](https://scoop.sh) or [winget](https://learn.microsoft.com/windows/package-manager/):
 
 ```powershell
 winget install Gyan.FFmpeg
@@ -48,7 +52,7 @@ sudo dnf install ./renosancse-craft-*.x86_64.rpm ffmpeg
 
 ### From source
 ```bash
-git clone https://github.com/artcraft/renosancse-craft.git
+git clone https://github.com/Px31/renosancse-craft.git
 cd renosancse-craft
 cargo run --release
 ```

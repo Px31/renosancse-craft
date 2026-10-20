@@ -29,11 +29,18 @@ fn main() -> iced::Result {
         }
     }
 
+    // Embed the app icon so the window, taskbar, and Alt-Tab carry the brand.
+    let icon = iced::window::icon::from_file_data(include_bytes!("../assets/icon.png"), None).ok();
+
     iced::application(
         "Renosancse Craft",
         RenosancseApp::update,
         RenosancseApp::view,
     )
+    .window(iced::window::Settings {
+        icon,
+        ..iced::window::Settings::default()
+    })
     .theme(RenosancseApp::theme)
     .run_with(RenosancseApp::new)
 }
