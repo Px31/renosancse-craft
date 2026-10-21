@@ -14,6 +14,13 @@ keywords = ["audio", "converter", "ffmpeg", "music", "gui"]
 categories = ["multimedia::audio", "gui"]
 exclude = [".github/", "assets/screenshots/"]
 
+[package.metadata.generate-rpm]
+# Read by `cargo generate-rpm` in the Release workflow.
+summary = "Native Rust + iced audio converter powered by FFmpeg"
+assets = [
+    { source = "target/release/renosancse-craft", dest = "/usr/bin/renosancse-craft", mode = "755" },
+]
+
 [[bin]]
 name = "renosancse-craft"
 path = "src/main.rs"
